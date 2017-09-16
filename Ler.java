@@ -5,11 +5,11 @@ public class Ler {
     private String nome;   
     private String [] temp = new String[22]; // inicializa o vetor com o tamanho do arquivo
     BufferedReader objeto;
-    // O contrutor deve ter o mesmo nome da Classe   
+    // O contrutor deve ter o mesmo nome da Classe topper  
     public Ler(String nomeArquivo){    
         nome = nomeArquivo;   
     }   
-    // método que retorna o vetor contendo as informações do arquivo  
+    // método que retorna o vetor contendo as informações do arquivo   
     public String[] criarVetor() {
         try {
             int i = 0;
