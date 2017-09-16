@@ -1,36 +1,35 @@
 
-public class Processador{
+public class Processador {
     public static void main(String[] args) {
-     String caminhoPriori = "/projects/ep1_so/processos/prioridades.txt";
-     String caminhoQuantum = "/projects/ep1_so/processos/quantum.txt";
-     
-    int prioridade = 0;
-    int quantum = 0;
-    Ler leituraPrioridade = new Ler(caminhoPriori);
-    Ler leituraQuantum = new Ler(caminhoQuantum);
-    String [] prioridades = leituraPrioridade.criarVetor();
-    String [] quanta = leituraQuantum.criarVetor();
-    String fim = null;
-    String caminho = "/projects/ep1_so/processos/";
-    String numero = null;
-    String txt = ".txt";
-    int repo = caminho.length() -4 ;
-                    System.out.println(caminho);
-    for (int i = 0; i < 21; ++i) {
-      if(i < 10){
-          numero = "0"+i;
-      }else numero = i+"";
-      fim = caminho+ "" + numero + "" +txt;
-      
-      System.out.println(fim);
+        String caminhoPriori = "/Users/lucasbordinhoncapalbo/Documents/EP1_SO_git/processos/prioridades.txt";
+        String caminhoQuantum = "/Users/lucasbordinhoncapalbo/Documents/EP1_SO_git/processos/quantum.txt";
+        Bcp inicia = null;
+        Bcp[] Processos = new Bcp[21];
+        Ler leituraPrioridade = new Ler(caminhoPriori);
+        Ler leituraQuantum = new Ler(caminhoQuantum);
+        String[] t;
+        String[] prioridades = leituraPrioridade.criarVetor();
+        String[] quanta = leituraQuantum.criarVetor();
+        String fim = null;
+        String caminho = "/Users/lucasbordinhoncapalbo/Documents/EP1_SO_git/processos/";
+        String numero = null;
+        String txt = ".txt";
+        System.out.println(caminho);
+        for (int i = 0; i < 10; ++i) {
+            if (i < 9) {
+                numero = "0" + (i + 1);
+            } else
+                numero = (i + 1) + "";
+            fim = caminho + "" + numero + "" + txt;
+            System.out.println(fim);
             System.out.println(prioridades[i]);
-                  System.out.println(quanta[i]);
-  }
-    Ler leitura = new Ler(fim);
-    String[] t = leitura.criarVetor();
-     for (int j = 0; j < t.length; j++) {
-                System.out.println(t[j]);
-    }
-    Bcp bcp1 = new Bcp(t,prioridade,quantum);
+            System.out.println(quanta[0]);// apenas um quantum para todo mundo
+            Ler leitura = new Ler(fim);
+            t = leitura.criarVetor();
+            inicia = new Bcp(t, Integer.parseInt(prioridades[i]), Integer.parseInt(quanta[0]));
+            Processos[i] = inicia;
+        }
+        int teste = 0;
+        System.out.println(teste);
     }
 }
