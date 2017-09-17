@@ -1,6 +1,8 @@
 
 public class Bcp {
     String[] programa;
+    int X = 0; //reg X
+    int Y = 0; //reg Y
     int prioridade = 0;
     int quantum = 0;
     int pc = 1; // comeca do 1 pois 0 é o nome do processo, vamos usar para
