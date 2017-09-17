@@ -9,18 +9,20 @@ public class Escalonador {
 	private List<Bcp> listaDeBloqueado = new ArrayList<Bcp>();
 
 	public void addProcessoPronto(Bcp bcp) {
-
 		listaDeProntos.add(bcp);
-
-		Collections.sort(listaDeProntos, new Comparator<Bcp>() {
-			@Override
-			public int compare(Bcp bcp1, Bcp bcp2) {
-				return bcp2.prioridade - bcp1.prioridade;
-			}
-		});
+    ordenaLista();
 	}
 
 	public void addProcessoBloqueado(Bcp bcp) {
 		listaDeBloqueado.add(bcp);
 	}
+
+  private static void ordenaLista() {
+    Collections.sort(listaDeProntos, new Comparator<Bcp>() {
+      @Override
+      public int compare(Bcp bcp1, Bcp bcp2) {
+        return bcp2.prioridade - bcp1.prioridade;
+      }
+    });
+  }
 }
