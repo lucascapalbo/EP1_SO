@@ -65,7 +65,7 @@ public class Escalonador {
 
     while (bcp.credito > 0){
       // ALGUMA COISA Q RODE A LINHA LÁ
-      // this.processador.executar(bcp);
+      Interrupcao interrupcao = this.processador.executar(bcp);
       bcp.credito--;
     }
   }

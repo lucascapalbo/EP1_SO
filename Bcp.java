@@ -2,18 +2,16 @@
  * Classe que representa um processo na tabela de bcp.
  */
 public class Bcp {
-
-    String[] programa;
-
+    
     int pid;
     String nome;
+    String[] programa;
     int quantum;
     int prioridade;
 
-    int credito;
-    int pc;
+    private Processador.Estado contexto;
 
-    private Processador.Estado estadoAtual;
+    int credito;
 
     public Bcp(int pid, String[] programa, int prioridade, int quantum) {
         this.pid = pid;
@@ -23,15 +21,11 @@ public class Bcp {
         this.quantum = quantum;
 
         this.credito = 0;
-        this.pc = 1; // comeca do 1 pois 0 é o nome do processo.
+        this.contexto = new Processador.Estado();
     }
 
-    public void setEstadoAtual(Processador.Estado estadoAtual) {
-        this.estadoAtual = estadoAtual;
-    }
-
-    public Processador.Estado getEstadoAtual() {
-        return estadoAtual;
+    public Processador.Estado getContexto() {
+        return contexto;
     }
 
     @Override
