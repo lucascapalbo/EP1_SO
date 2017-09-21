@@ -3,21 +3,37 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Classe responsável por armazenar e gerenciar a troca de processos
+ */
 public class Escalonador {
 
-	private List<Bcp> filaDeProntos = new ArrayList<Bcp>();
-	private List<Bcp> listaDeBloqueados = new ArrayList<Bcp>();
+  private Processador processador;
 
-	public void addProcessoPronto(Bcp bcp) {
-		filaDeProntos.add(bcp);
-    ordenaFila();
-	}
+  private List<Bcp> processos = new ArrayList<Bcp>();
 
-	public void addProcessoBloqueado(Bcp bcp) {
-		listaDeBloqueados.add(bcp);
-	}
+  private List<Bcp> filaDeProntos = new ArrayList<Bcp>();
+  private List<Bcp> listaDeBloqueados = new ArrayList<Bcp>();
 
-  private static void ordenaFila() {
+  public Escalonador(Processador processador) {
+    this.processador = processador;
+  }
+
+  public void carregarProcesso(Bcp processo) {
+    this.processos.add(processo);
+    addProcessoPronto(processo);
+  }
+
+  public void addProcessoPronto(Bcp bcp) {
+    filaDeProntos.add(bcp);
+    this.ordenaFila();
+  }
+
+  public void addProcessoBloqueado(Bcp bcp) {
+    listaDeBloqueados.add(bcp);
+  }
+
+  private void ordenaFila() {
     Collections.sort(filaDeProntos, new Comparator<Bcp>() {
       @Override
       public int compare(Bcp bcp1, Bcp bcp2) {
@@ -26,14 +42,32 @@ public class Escalonador {
     });
   }
 
-
-  public void rodaPrimeiroProcesso() {
-    Bcp bcp = filaDeProntos.get(0); // pega o primeiro da fila
-
-    while(bcp.quantum > 0)
-      // ALGUMA COISA Q RODE A LINHA LÁ
-
-    bcp.prioridade--;
-    ordenaFila():
+  /**
+   * Inicia execução.
+   */
+  public void executar() {
+    //Enquanto a fila de processos não for vazia...
+    rodaProximoProcesso();
   }
+
+  /**
+   * Pega primeiro processo da fila.
+   */
+  public Bcp getPrimeiroProcesso() {
+    return filaDeProntos.get(0);
+  }
+
+  /**
+   * 
+   */
+  public void rodaProximoProcesso() {
+    Bcp bcp = getPrimeiroProcesso();
+
+    while (bcp.credito > 0){
+      // ALGUMA COISA Q RODE A LINHA LÁ
+      // this.processador.executar(bcp);
+      bcp.credito--;
+    }
+  }
+
 }
