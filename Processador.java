@@ -29,6 +29,7 @@ public class Processador {
         for (; registradores.pc <= processo.programa.length; registradores.pc++) {
             if (quantumCont == 0)
                 return Interrupcao.QUANTUM;
+            System.out.println(processo.nome + " l:" + registradores.pc);
             quantumCont--;
             //TODO interpretar linha de código
             // return Interrupcao.IO;

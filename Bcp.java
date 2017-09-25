@@ -12,6 +12,8 @@ public class Bcp {
     private Processador.Estado contexto;
 
     int credito;
+    int esperaBloqueado;
+    boolean estaRodando; 
 
     public Bcp(int pid, String[] programa, int prioridade, int quantum) {
         this.pid = pid;
