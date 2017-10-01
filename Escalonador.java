@@ -73,7 +73,7 @@ public class Escalonador {
     for (Iterator<Bcp> iterator = this.filaDeBloqueados.iterator(); iterator.hasNext();) {
       Bcp bcp = iterator.next();
       if (bcp.esperaBloqueado == 0) {
-        System.out.println("* " + bcp.nome + " saiu da fila de bloqueados");
+        Escritor.escreve("* " + bcp.nome + " saiu da fila de bloqueados");
         this.addProcessoPronto(bcp);
         iterator.remove();
       }
@@ -94,7 +94,7 @@ public class Escalonador {
    * Inicia execução.
    */
   public void executar() {
-    System.out.println();
+    Escritor.escreve("");
     while (this.processos.size() > 0) { // Enquanto a fila de processos não for vazia...
       if (deveDistribuirCreditos())
         distribuirCreditos();
@@ -107,7 +107,7 @@ public class Escalonador {
 
       bcp.estaRodando = true;
       Interrupcao interrupcao = this.processador.executar(bcp);
-      System.out.println("Interrupção por " + interrupcao + ", Contexto=" + bcp.getContexto());
+      Escritor.escreve("Interrupção por " + interrupcao + ", Contexto=" + bcp.getContexto());
       bcp.credito -= 1;
 
       switch (interrupcao) {
@@ -124,15 +124,15 @@ public class Escalonador {
 
       bcp.estaRodando = false;
 
-      System.out.println();
+      Escritor.escreve("");
       System.out.print("Prontos: ");
       for (Bcp b : this.filaDeProntos)
         System.out.print("[" + b.nome + "(" + b.credito + ")], ");
-      System.out.println();
+      Escritor.escreve("");
       System.out.print("Bloqueados: ");
       for (Bcp b : this.filaDeBloqueados)
         System.out.print("[" + b.nome + "(" + b.credito + ")(" + b.esperaBloqueado + ")], ");
-      System.out.println();
+      Escritor.escreve("");
     }
   }
 }
