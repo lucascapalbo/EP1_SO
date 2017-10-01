@@ -31,7 +31,7 @@ public class Escalonador {
 
   public void addProcessoPronto(Bcp bcp) {
     this.filaDeProntos.add(bcp);
-    this.ordenaFila();
+    this.ordenaFilaProntos();
   }
 
   public void addProcessoBloqueado(Bcp bcp) {
@@ -39,14 +39,18 @@ public class Escalonador {
     this.filaDeBloqueados.add(bcp);
   }
 
-  private void ordenaFila() {
-    //TODO Garantir que o processo que rodou por último tenha prioridade, caso haja outro com mesmo credito
-    //#maybe ordenaFila(Bcp ultimoProcessoRodado)
-    //#maybe checar flag estaRodando. Lembrar de resetar ela logo em seguida (Teria que ser fora do loop).
+  private void ordenaFilaProntos() {
     Collections.sort(filaDeProntos, new Comparator<Bcp>() {
       @Override
       public int compare(Bcp bcp1, Bcp bcp2) {
-        return bcp2.credito - bcp1.credito;
+        int r = bcp2.credito - bcp1.credito;
+        if (r == 0) { //Quem já está rodando tem prioridade em relação a bcps com mesma prioridade
+          if (bcp1.estaRodando)
+            return -1;
+          if (bcp2.estaRodando)
+            return 1;
+        }
+        return r;
       }
     });
   }
@@ -62,17 +66,18 @@ public class Escalonador {
     for (Bcp bcp : this.processos)
       bcp.credito = bcp.prioridade;
 
-    this.ordenaFila();
+    this.ordenaFilaProntos();
   }
 
   private void decrementaEsperaBloqueados() {
     for (Iterator<Bcp> iterator = this.filaDeBloqueados.iterator(); iterator.hasNext();) {
       Bcp bcp = iterator.next();
-      bcp.esperaBloqueado -= 1;
       if (bcp.esperaBloqueado == 0) {
+        System.out.println("* " + bcp.nome + " saiu da fila de bloqueados");
         this.addProcessoPronto(bcp);
         iterator.remove();
       }
+      bcp.esperaBloqueado -= 1;
     }
   }
 
@@ -101,24 +106,32 @@ public class Escalonador {
         continue;
 
       bcp.estaRodando = true;
-
       Interrupcao interrupcao = this.processador.executar(bcp);
+      System.out.println("Interrupção por " + interrupcao + ", Contexto=" + bcp.getContexto());
       bcp.credito -= 1;
-      this.ordenaFila();
 
       switch (interrupcao) {
       case QUANTUM:
         this.addProcessoPronto(bcp);
         break;
-      case IO:
+      case ES:
         this.addProcessoBloqueado(bcp);
         break;
       case EOF:
         this.processos.remove(bcp);
         break;
       }
+
+      bcp.estaRodando = false;
+
+      System.out.println();
+      System.out.print("Prontos: ");
       for (Bcp b : this.filaDeProntos)
-        System.out.print("[" + b.nome + "](" + b.credito + "), ");
+        System.out.print("[" + b.nome + "(" + b.credito + ")], ");
+      System.out.println();
+      System.out.print("Bloqueados: ");
+      for (Bcp b : this.filaDeBloqueados)
+        System.out.print("[" + b.nome + "(" + b.credito + ")(" + b.esperaBloqueado + ")], ");
       System.out.println();
     }
   }

@@ -3,10 +3,19 @@
  */
 public class Processador {
 
+    private static enum ResultadoProcessamento {
+        OK, ES, ERRO, FIM
+    }
+
     public static class Estado {
-        int x = 0;
-        int y = 0;
-        int pc;
+        int X = 0;
+        int Y = 0;
+        int PC = 1;
+
+        @Override
+        public String toString() {
+            return "<X=" + this.X + " Y=" + this.Y + " PC=" + this.PC + ">";
+        }
     }
 
     private Estado contexto;
@@ -19,20 +28,60 @@ public class Processador {
         return contexto;
     }
 
+    private ResultadoProcessamento processar(String instrucao) {
+        instrucao = instrucao.trim();
+        if (instrucao.equals("E/S"))
+            return ResultadoProcessamento.ES;
+
+        if (instrucao.equals("COM"))
+            return ResultadoProcessamento.OK;
+
+        if (instrucao.equals("SAIDA"))
+            return ResultadoProcessamento.FIM;
+        try {
+            if (instrucao.startsWith("X=")) {
+                this.contexto.X = Integer.parseInt(instrucao.substring(2));
+                return ResultadoProcessamento.OK;
+            }
+
+            if (instrucao.startsWith("Y=")) {
+                this.contexto.Y = Integer.parseInt(instrucao.substring(2));
+                return ResultadoProcessamento.OK;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultadoProcessamento.ERRO;
+        }
+
+        return ResultadoProcessamento.ERRO;
+
+    }
+
     public Interrupcao executar(Bcp processo) {
         this.setContexto(processo.getContexto());
 
         Estado registradores = this.getContexto();
 
         int quantumCont = processo.quantum;
-
-        for (; registradores.pc <= processo.programa.length; registradores.pc++) {
+        System.out.println("Iniciando: " + processo.nome);
+        for (; registradores.PC <= processo.programa.length;) {
             if (quantumCont == 0)
                 return Interrupcao.QUANTUM;
-            System.out.println(processo.nome + " l:" + registradores.pc);
+            ResultadoProcessamento resultado = this.processar(processo.programa[registradores.PC]);
+            System.out.println(this.contexto.PC + ">'" + processo.programa[registradores.PC] + "' ---> " + resultado);
+            registradores.PC++;
+
+            switch (resultado) {
+            case ES:
+                return Interrupcao.ES;
+            case FIM:
+                return Interrupcao.EOF;
+            case ERRO:
+                return Interrupcao.EOF;
+
+            default:
+            }
             quantumCont--;
-            //TODO interpretar linha de código
-            // return Interrupcao.IO;
         }
 
         return Interrupcao.EOF;
