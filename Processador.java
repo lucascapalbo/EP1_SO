@@ -63,12 +63,12 @@ public class Processador {
         Estado registradores = this.getContexto();
 
         int quantumCont = processo.quantum;
-        System.out.println("Iniciando: " + processo.nome);
+        Escritor.escreve("Iniciando: " + processo.nome);
         for (; registradores.PC <= processo.programa.length;) {
             if (quantumCont == 0)
                 return Interrupcao.QUANTUM;
             ResultadoProcessamento resultado = this.processar(processo.programa[registradores.PC]);
-            System.out.println(this.contexto.PC + ">'" + processo.programa[registradores.PC] + "' ---> " + resultado);
+            Escritor.escreve(this.contexto.PC + ">'" + processo.programa[registradores.PC] + "' ---> " + resultado);
             registradores.PC++;
 
             switch (resultado) {
