@@ -12,6 +12,9 @@ public class Principal {
         int quantum = Integer.parseInt(Leitor.lerArquivo(caminhoQuantum)[0]);
         File[] filesProgramas = Leitor.lerProgramas();
 
+        // Escritor.inicializa("log" + String.format("%02d", quantum) + ".txt");
+        Escritor.inicializa("Teste.txt");
+
         Processador processador = new Processador();
         Escalonador escalonador = new Escalonador(processador);
 
@@ -28,5 +31,6 @@ public class Principal {
         Leitor.setPasta(caminhoData);
 
         new Principal().iniciaComputacao(caminhoData);
+        Escritor.escreve("HUE HUE HUE BR BR");
     }
 }
