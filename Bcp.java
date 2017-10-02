@@ -3,6 +3,12 @@
  */
 public class Bcp {
     
+    public static enum Estado {
+        PRONTO,
+        BLOQUEADO,
+        EXECUTANDO
+    }
+
     String nome;//Nome do programa
     String[] programa; //Segmento de texto
     int prioridade; // Prioridade
@@ -12,7 +18,7 @@ public class Bcp {
 
     int credito; // Crédito
     int esperaBloqueado; // Contador para retorno de ES
-    boolean estaRodando; // Var aux para ordenação
+    private Estado estado; // Estado do processo
 
     public Bcp(String[] programa, int prioridade) {
         this.nome = programa[0];
@@ -21,6 +27,14 @@ public class Bcp {
 
         this.credito = 0;
         this.contexto = new Processador.Estado();
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     public Processador.Estado getContexto() {

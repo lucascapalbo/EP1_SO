@@ -36,11 +36,13 @@ public class Escalonador {
 
   public void addProcessoPronto(Bcp bcp) {
     this.filaDeProntos.add(bcp);
+    bcp.setEstado(Bcp.Estado.PRONTO);
     this.ordenaFilaProntos();
   }
 
   public void addProcessoBloqueado(Bcp bcp) {
     bcp.esperaBloqueado = TEMPO_ESPERA_ES;
+    bcp.setEstado(Bcp.Estado.BLOQUEADO);
     this.filaDeBloqueados.add(bcp);
   }
 
@@ -50,9 +52,9 @@ public class Escalonador {
       public int compare(Bcp bcp1, Bcp bcp2) {
         int r = bcp2.credito - bcp1.credito;
         if (r == 0) { //Quem já está rodando tem prioridade em relação a bcps com mesma prioridade
-          if (bcp1.estaRodando)
+          if (bcp1.getEstado() == Bcp.Estado.EXECUTANDO)
             return -1;
-          if (bcp2.estaRodando)
+          if (bcp1.getEstado() == Bcp.Estado.EXECUTANDO)
             return 1;
         }
         return r;
@@ -108,7 +110,7 @@ public class Escalonador {
       if (bcp == null) // Nenhum processo pronto
         continue;
 
-      bcp.estaRodando = true;
+      bcp.setEstado(Bcp.Estado.EXECUTANDO);
 
       Logger.escreveExecutando(bcp);
 
@@ -136,7 +138,6 @@ public class Escalonador {
       Logger.escreveCallbackBCP(bcp, bcp.getContexto().PC - pcInicial);
       if (fim)
         Logger.escreveFim(bcp);
-      bcp.estaRodando = false;
     }
 
     Logger.escreveEstatistica(Estatistica.calculaMediaTrocas(), Estatistica.calculaMediaInstrucoes(), this.quantum);
