@@ -3,24 +3,21 @@
  */
 public class Bcp {
     
-    int pid;
-    String nome;
-    String[] programa;
-    int quantum;
-    int prioridade;
+    String nome;//Nome do programa
+    String[] programa; //Segmento de texto
+    int prioridade; // Prioridade
 
+    // Contexto do processo. Contém PC e registradores X e Y
     private Processador.Estado contexto;
 
-    int credito;
-    int esperaBloqueado;
-    boolean estaRodando; 
+    int credito; // Crédito
+    int esperaBloqueado; // Contador para retorno de ES
+    boolean estaRodando; // Var aux para ordenação
 
-    public Bcp(int pid, String[] programa, int prioridade, int quantum) {
-        this.pid = pid;
+    public Bcp(String[] programa, int prioridade) {
         this.nome = programa[0];
         this.programa = programa;
         this.prioridade = prioridade;
-        this.quantum = quantum;
 
         this.credito = 0;
         this.contexto = new Processador.Estado();
@@ -28,10 +25,5 @@ public class Bcp {
 
     public Processador.Estado getContexto() {
         return contexto;
-    }
-
-    @Override
-    public String toString() {
-        return "BCP<nome=" + this.nome + " prioridade=" + this.prioridade + ">";
     }
 }

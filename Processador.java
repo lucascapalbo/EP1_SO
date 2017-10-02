@@ -11,14 +11,10 @@ public class Processador {
         int X = 0;
         int Y = 0;
         int PC = 1;
-
-        @Override
-        public String toString() {
-            return "<X=" + this.X + " Y=" + this.Y + " PC=" + this.PC + ">";
-        }
     }
 
     private Estado contexto;
+    int quantum;
 
     public void setContexto(Estado contexto) {
         this.contexto = contexto;
@@ -62,13 +58,12 @@ public class Processador {
 
         Estado registradores = this.getContexto();
 
-        int quantumCont = processo.quantum;
-        Escritor.escreve("Iniciando: " + processo.nome);
+        int quantumCont = this.quantum;
+
         for (; registradores.PC <= processo.programa.length;) {
             if (quantumCont == 0)
                 return Interrupcao.QUANTUM;
             ResultadoProcessamento resultado = this.processar(processo.programa[registradores.PC]);
-            Escritor.escreve(this.contexto.PC + ">'" + processo.programa[registradores.PC] + "' ---> " + resultado);
             registradores.PC++;
 
             switch (resultado) {
